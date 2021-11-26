@@ -1,0 +1,25 @@
+a {
+    text-decoration: none;
+}
+
+div.tab-pane {
+    width: 100%;
+    height: 100%;
+}
+nav.up {
+    position: fixed;
+    top: 0;
+    background-color: white;
+    color:#53BD8F;
+    width: 100%;
+    z-index: 999;
+}
+div.upp {
+    padding-top: 40px;
+}
+.navup{
+    margin: 10px;
+}
+.submit{
+    margin-top: 20px;
+}
