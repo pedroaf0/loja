@@ -2,6 +2,8 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+
 <style>
 * {
   box-sizing: border-box;
@@ -66,6 +68,46 @@ h1 {
     width: 100%;
   }
 }
+
+#myInput {
+  background-image: url('/Produtos/img/searchicon.png');
+  background-position: 10px 12px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+
+a.wp {
+  font-family: Arial, Helvetica, sans-serif;
+  
+  background: #25D366;
+  color: #ffffff;
+  display: inline-block;
+  padding: 10px;
+  border-radius: 25px;
+  font-size: large;
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  width: 100%;
+  align-items: center; 
+  justify-content: center;
+  
+  box-shadow: 0 0 0 3px;
+  
+  text-decoration: none;
+  
+  cursor: pointer;
+}
+.preço{
+  font-size: large;
+  color: #239e50;
+
+}
+
 </style>
 </head>
 <body>
@@ -73,60 +115,83 @@ h1 {
 <!-- MAIN (Center website) -->
 <div class="main">
 
-<h1>Loja.pedroaf0.tk</h1>
+<h1>Importações do @pedroaf0</h1>
 <hr>
 
-<h2>PORTFOLIO</h2>
-<p>Aqui você encontra produtos digitais a um preço realmente justo</p>
-
+<h2>Catálogo</h2>
+<p>Use o campo abaixo para pesquisar</p>
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Pesqueise pelo nome..." title="Type in a name">
 <!-- Portfolio Gallery Grid -->
 <div class="row">
-  <a style="color: black; text-decoration: none;" href="/Produtos/Cardapio-Bot.html">
-  <div class="column">
-    <div class="content">
-      <img src="http://repository-images.githubusercontent.com/259762114/50ca7c00-d3da-11ea-9301-70689c05f732" alt="Mountains" style="width:100%">
-      <h3>[Código] Cardapio-Bot</h3>
-      <p>Bot que posta semanalmente o cardápio do refeitório do IFRS campus sertão</p>
-    </div>
-  </a>
-  </div>
-  <a style="color: black; text-decoration: none;" href="/Produtos/Hi-Tech.html">
-  <div class="column">
-    <div class="content">
-    <img src="/hi-tech.png" alt="Nature" style="width:100%">
-      <h3>[Música] B R U U - Hi-Tech (Official Audio) #UNNF</h3>
-      <p>Aqui você compra a versão sem vinheta sem </p>
+  <div  p="Amarula, o licor sul-africano que dominou o mundo!" class="column">
+    <div  class="content">
+      <img src="./Produtos/img/licor-amarula.webp" alt="Amarula" style="width:100%">
+      <h3>Amarula, o licor sul-africano que dominou o mundo!</h3>
+      <p class="preço" value="10"> Calculando...  </p>
+      <a class="wp" target="_blank"  href="https://wa.me/54984251424?text=Opa, me ve uma Amarula">
+        <i class="fab fa-whatsapp fa-2x"></i>
+        <span style="
+        padding: 10px;
+    ">Pedir </span>
+      </a>
     </div>
   </div>
-</a>
-
-  <div class="column">
+  <div p="Chá cha Granulado Instantâneo - 350 Gramas" class="column">
     <div class="content">
-    <img src="/w3images/lights.jpg" alt="Lights" style="width:100%">
-      <h3>My Work</h3>
-      <p>Lorem ipsum dolor sit amet, tempor prodesset eos no. Temporibus necessitatibus sea ei, at tantas oporteat nam. Lorem ipsum dolor sit amet, tempor prodesset eos no.</p>
-    </div>
-  
-  </div>
-  <div class="column">
-    <div class="content">
-    <img src="/w3images/mountains.jpg" alt="Mountains" style="width:100%">
-      <h3>My Work</h3>
-      <p>Lorem ipsum dolor sit amet, tempor prodesset eos no. Temporibus necessitatibus sea ei, at tantas oporteat nam. Lorem ipsum dolor sit amet, tempor prodesset eos no.</p>
+      <img class="p" src="./Produtos/img/2891774261_2.png" alt="chá" style="width:100%">
+      <h3>Chá Granulado Instantâneo - 350 Gramas</h3>
+      <p class="preço" value="15"> Calculando...  </p>
+      <a class="wp" target="_blank"  href="https://wa.me/54984251424?text=Opa, me ve um Chá">
+        <i class="fab fa-whatsapp fa-2x"></i>
+        <span style="
+        padding: 10px;
+    ">Pedir </span>
+      </a>
     </div>
   </div>
-<!-- END GRID -->
 </div>
 
-<div class="content">
+<!-- <div class="content">
   <img src="/w3images/p3.jpg" alt="Bear" style="width:100%">
   <h3>Some Other Work</h3>
   <p>Lorem ipsum dolor sit amet, tempor prodesset eos no. Temporibus necessitatibus sea ei, at tantas oporteat nam. Lorem ipsum dolor sit amet, tempor prodesset eos no.</p>
   <p>Lorem ipsum dolor sit amet, tempor prodesset eos no. Temporibus necessitatibus sea ei, at tantas oporteat nam. Lorem ipsum dolor sit amet, tempor prodesset eos no.</p>
-</div>
+</div> -->
 
 <!-- END MAIN -->
 </div>
+<script>
 
+async function a() {
+  let api = await fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL");
+  let data = JSON.parse(await api.text());
+console.log(data.USDBRL.ask)
+  const frete = 15;
+  const preços = document.getElementsByClassName("preço");
+  for (let index = 0; index < preços.length; index++) {
+    const elemento = preços[index];
+    elemento.innerHTML = `R$ ${Math.round(parseInt(elemento.getAttribute('value'))*data.USDBRL.ask)+frete},00`;
+
+  }
+
+}a()
+
+function myFunction() {
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    const elementos = document.getElementsByClassName("column")
+    console.log(elementos)
+    for (i = 0; i < elementos.length; i++) {
+        txtValue = elementos[i].getAttribute('p');
+        console.log(elementos[i])
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          elementos[i].style.display = "";
+        } else {
+          elementos[i].style.display = "none";
+        }
+    }
+}
+</script>
 </body>
 </html>
