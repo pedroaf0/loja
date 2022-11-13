@@ -3,6 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src='a076d05399.js' crossorigin='anonymous'></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <style>
 * {
@@ -81,7 +82,7 @@ h1 {
 }
 
 
-a.wp {
+.wp {
   font-family: Arial, Helvetica, sans-serif;
   
   background: #25D366;
@@ -99,7 +100,6 @@ a.wp {
   box-shadow: 0 0 0 3px;
   
   text-decoration: none;
-  
   cursor: pointer;
 }
 .preço{
@@ -120,35 +120,11 @@ a.wp {
 
 <h2>Catálogo</h2>
 <p>Use o campo abaixo para pesquisar</p>
-<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Pesqueise pelo nome..." title="Type in a name">
+<input type="text" id="myInput"  onkeyup="myFunction()" placeholder="Pesqueise pelo nome..." title="Type in a name">
 <!-- Portfolio Gallery Grid -->
-<div class="row">
-  <div  p="Amarula, o licor sul-africano que dominou o mundo!" class="column">
-    <div  class="content">
-      <img src="./Produtos/img/licor-amarula.webp" alt="Amarula" style="width:100%">
-      <h3>Amarula, o licor sul-africano que dominou o mundo!</h3>
-      <p class="preço" value="10"> Calculando...  </p>
-      <a class="wp" target="_blank"  href="https://wa.me/54984251424?text=Opa, me ve uma Amarula">
-        <i class="fab fa-whatsapp fa-2x"></i>
-        <span style="
-        padding: 10px;
-    ">Pedir </span>
-      </a>
-    </div>
+<div id="produtos" class="row">
   </div>
-  <div p="Chá cha Granulado Instantâneo - 350 Gramas" class="column">
-    <div class="content">
-      <img class="p" src="./Produtos/img/2891774261_2.png" alt="chá" style="width:100%">
-      <h3>Chá Granulado Instantâneo - 350 Gramas</h3>
-      <p class="preço" value="15"> Calculando...  </p>
-      <a class="wp" target="_blank"  href="https://wa.me/54984251424?text=Opa, me ve um Chá">
-        <i class="fab fa-whatsapp fa-2x"></i>
-        <span style="
-        padding: 10px;
-    ">Pedir </span>
-      </a>
-    </div>
-  </div>
+  
 </div>
 
 <!-- <div class="content">
@@ -162,19 +138,6 @@ a.wp {
 </div>
 <script>
 
-async function a() {
-  let api = await fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL");
-  let data = JSON.parse(await api.text());
-console.log(data.USDBRL.ask)
-  const frete = 15;
-  const preços = document.getElementsByClassName("preço");
-  for (let index = 0; index < preços.length; index++) {
-    const elemento = preços[index];
-    elemento.innerHTML = `R$ ${Math.round(parseInt(elemento.getAttribute('value'))*data.USDBRL.ask)+frete},00`;
-
-  }
-
-}a()
 
 function myFunction() {
     var input, filter, ul, li, a, i, txtValue;
@@ -191,6 +154,55 @@ function myFunction() {
           elementos[i].style.display = "none";
         }
     }
+}
+function carregarprodutos(){
+  fetch("https://ruufpelbot.000webhostapp.com/produtos.php", {
+  "method": "GET",
+  "headers": {}
+})
+.then(async response => {
+  response = await response.json()
+  console.log(response);
+  for (let index = 0; index < response.results.length; index++) {
+    const produto = response.results[index];
+    
+    document.getElementById('produtos').innerHTML += 
+    `<div p="${produto.properties['Palavras-chave'].rich_text[0].plain_text}" class="column">
+      <div class="content">
+        <img class="p" src="${produto.properties['imagem'].files[0].name}" alt="chá" style="width:100%">
+        <h3>${produto.properties['Nome'].title[0].plain_text}</h3>
+        <p class="preço">R$ ${produto.properties['Preço fixo'].number.toFixed(2)}</p>
+        <span class="wp" target="_blank" onclick="checkout('/checkout?valor=${produto.properties['Preço fixo'].number}')" >
+          <i class="fab fa-whatsapp fa-2x"></i>
+          <span style="
+          padding: 10px;
+      ">Pedir </span>
+        </span>
+      </div>
+    </div>`
+  }
+
+})
+.catch(err => {
+  console.error(err);
+});
+}carregarprodutos()
+function checkout(url){
+  Swal.fire({
+  title: '<strong>Checkout</strong>',
+  icon: 'info',
+  html:
+    `<iframe style="width:100%;height: 300px;" src="${url}"></iframe>`,
+  showCloseButton: true,
+  showCancelButton: true,
+  focusConfirm: false,
+  confirmButtonText:
+    '<i class="fa fa-thumbs-up"></i> Feito!',
+  confirmButtonAriaLabel: 'Feito!',
+  cancelButtonText:
+    'Fechar',
+  cancelButtonAriaLabel: 'Fechar'
+})
 }
 </script>
 </body>
