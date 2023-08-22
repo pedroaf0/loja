@@ -81,10 +81,9 @@ h1 {
   margin-bottom: 12px;
 }
 
-
 .wp {
+  /* Existing styling */
   font-family: Arial, Helvetica, sans-serif;
-  
   background: #25D366;
   color: #ffffff;
   display: inline-block;
@@ -94,18 +93,21 @@ h1 {
   display: grid;
   grid-template-columns: auto auto auto auto;
   width: 100%;
-  align-items: center; 
+  align-items: center;
   justify-content: center;
-  
   box-shadow: 0 0 0 3px;
-  
   text-decoration: none;
   cursor: pointer;
 }
-.preço{
-  font-size: large;
-  color: #239e50;
 
+/* Additional styling for the copy button */
+.wp.copy {
+  background-color: #007bff; /* Blue color for copying */
+  padding: 8px 15px; /* Adjust padding for the smaller button size */
+}
+
+.wp.copy i {
+  margin-right: 5px; /* Add some space between icon and text */
 }
 
 </style>
@@ -152,18 +154,17 @@ function carregarprodutos() {
     for (let index = 0; index < response.results.length; index++) {
       const produto = response.results[index];
       
-      document.getElementById('produtos').innerHTML += 
-      `<div p="${produto.properties['Palavras-chave'].rich_text[0].plain_text}" class="column">
-        <div class="content">
-          <img class="p" src="${produto.properties['imagem'].files[0].name}" alt="chá" style="width:100%">
-          <h3>${produto.properties['Nome'].title[0].plain_text}</h3>
-          <span class="wp" onclick="copyImage('${produto.properties['imagem'].files[0].name}')">
-            <i class="far fa-copy fa-2x"></i>
-            <span style="padding: 10px;">Copiar Imagem</span>
-          </span>
-        </div>
-      </div>`;
-    }
+document.getElementById('produtos').innerHTML += 
+`<div p="${produto.properties['Palavras-chave'].rich_text[0].plain_text}" class="column">
+  <div class="content">
+    <img class="p" src="${produto.properties['imagem'].files[0].name}"  style="width:100%">
+    <h3>${produto.properties['Nome'].title[0].plain_text}</h3>
+    <span class="wp copy" onclick="copyImage('${produto.properties['imagem'].files[0].name}')">
+      <i class="far fa-copy fa-2x"></i>
+      <span style="padding: 10px;">Copiar Imagem</span>
+    </span>
+  </div>
+</div>`;
   })
   .catch(err => {
     console.error(err);
