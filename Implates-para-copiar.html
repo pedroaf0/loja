@@ -140,19 +140,20 @@ function myFunction() {
         }
     }
 }
-function carregarprodutos() {
+  function carregarprodutos() {
   fetch("https://ruufpelbot.000webhostapp.com/Implantes/imagens.php") // Replace with the actual API URL
   .then(async response => {
     const imageLinks = await response.json();
     console.log(imageLinks);
-    for (let index = 0; index < response.results.length; index++) {
-      const produto = response.results[index];
+
+    for (let index = 0; index < imageLinks.length; index++) {
+      const imageLink = imageLinks[index];
       
       document.getElementById('produtos').innerHTML += 
       `<div class="column">
         <div class="content">
-          <img class="p" src="${imageLinks[index]}" alt="chá" style="width:100%">
-          <span class="wp copy" onclick="copyImage('${imageLinks[index]}')">
+          <img class="p" src="${imageLink}" alt="chá" style="width:100%">
+          <span class="wp copy" onclick="copyImage('${imageLink}')">
             <i class="far fa-copy fa-2x"></i>
             <span style="padding: 10px;">Copiar Imagem</span>
           </span>
