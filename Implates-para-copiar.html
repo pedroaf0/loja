@@ -166,22 +166,27 @@ function myFunction() {
   });
 }
 
+async function copyImage(imageSrc) {
+  try {
+    const response = await fetch(imageSrc);
+    const blob = await response.blob();
 
-function copyImage(imageSrc) {
-  const dummyElement = document.createElement('textarea');
-  dummyElement.value = imageSrc;
-  document.body.appendChild(dummyElement);
-  dummyElement.select();
-  document.execCommand('copy');
-  document.body.removeChild(dummyElement);
+    const clipboardData = new DataTransfer();
+    clipboardData.items.add(new ClipboardItem({ 'image/png': blob }));
 
-  Swal.fire({
-    title: 'Imagem Copiada!',
-    text: 'A imagem foi copiada para a área de transferência.',
-    icon: 'success',
-    timer: 2000
-  });
+    await navigator.clipboard.write(clipboardData);
+
+    Swal.fire({
+      title: 'Image Copied!',
+      text: 'The image has been copied to the clipboard.',
+      icon: 'success',
+      timer: 2000
+    });
+  } catch (err) {
+    console.error('Unable to copy image:', err);
+  }
 }
+
 
 carregarprodutos();
 </script>
