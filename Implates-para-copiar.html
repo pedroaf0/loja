@@ -140,24 +140,19 @@ function myFunction() {
         }
     }
 }
-
 function carregarprodutos() {
-  fetch("https://ruufpelbot.000webhostapp.com/produtos.php", {
-    "method": "GET",
-    "headers": {}
-  })
+  fetch("https://ruufpelbot.000webhostapp.com/Implantes/imagens.php") // Replace with the actual API URL
   .then(async response => {
-    response = await response.json();
-    console.log(response);
+    const imageLinks = await response.json();
+    console.log(imageLinks);
     for (let index = 0; index < response.results.length; index++) {
       const produto = response.results[index];
-
+      
       document.getElementById('produtos').innerHTML += 
-      `<div p="${produto.properties['Palavras-chave'].rich_text[0].plain_text}" class="column">
+      `<div class="column">
         <div class="content">
-          <img class="p" src="${produto.properties['imagem'].files[0].name}" alt="chá" style="width:100%">
-          <h3>${produto.properties['Nome'].title[0].plain_text}</h3>
-          <span class="wp" onclick="copyImage('${produto.properties['imagem'].files[0].name}')">
+          <img class="p" src="${imageLinks[index]}" alt="chá" style="width:100%">
+          <span class="wp copy" onclick="copyImage('${imageLinks[index]}')">
             <i class="far fa-copy fa-2x"></i>
             <span style="padding: 10px;">Copiar Imagem</span>
           </span>
@@ -169,6 +164,7 @@ function carregarprodutos() {
     console.error(err);
   });
 }
+
 
 function copyImage(imageSrc) {
   const dummyElement = document.createElement('textarea');
