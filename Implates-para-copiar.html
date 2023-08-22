@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src='a076d05399.js' crossorigin='anonymous'></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f1f1f1;
+  padding: 20px;
+  font-family: Arial;
+}
+
+/* Center website */
+.main {
+  max-width: 1000px;
+  margin: auto;
+}
+
+h1 {
+  font-size: 50px;
+  word-break: break-all;
+}
+
+.row {
+  margin: 8px -16px;
+}
+
+/* Add padding BETWEEN each column */
+.row,
+.row > .column {
+  padding: 8px;
+}
+
+/* Create four equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 25%;
+}
+
+/* Clear floats after rows */ 
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Content */
+.content {
+  background-color: white;
+  padding: 10px;
+}
+
+/* Responsive layout - makes a two column-layout instead of four columns */
+@media screen and (max-width: 900px) {
+  .column {
+    width: 50%;
+  }
+}
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
+}
+
+#myInput {
+  background-image: url('./Produtos/img/searchicon.png');
+  background-position: 10px 12px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+
+.wp {
+  font-family: Arial, Helvetica, sans-serif;
+  
+  background: #25D366;
+  color: #ffffff;
+  display: inline-block;
+  padding: 10px;
+  border-radius: 25px;
+  font-size: large;
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  width: 100%;
+  align-items: center; 
+  justify-content: center;
+  
+  box-shadow: 0 0 0 3px;
+  
+  text-decoration: none;
+  cursor: pointer;
+}
+.preço{
+  font-size: large;
+  color: #239e50;
+
+}
+
+</style>
+</head>
+<body>
+
+<!-- MAIN (Center website) -->
+<div class="main">
+  <h1>Importações do @pedroaf0</h1>
+  <hr>
+  <h2>Catálogo</h2>
+  <p>Use o campo abaixo para pesquisar</p>
+  <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Pesquise pelo nome..." title="Type in a name">
+  <!-- Portfolio Gallery Grid -->
+  <div id="produtos" class="row"></div>
+</div>
+
+<script>
+function myFunction() {
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    const elementos = document.getElementsByClassName("column")
+    console.log(elementos)
+    for (i = 0; i < elementos.length; i++) {
+        txtValue = elementos[i].getAttribute('p');
+        console.log(elementos[i])
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          elementos[i].style.display = "";
+        } else {
+          elementos[i].style.display = "none";
+        }
+    }
+}
+
+function carregarprodutos() {
+  fetch("https://ruufpelbot.000webhostapp.com/produtos.php", {
+    "method": "GET",
+    "headers": {}
+  })
+  .then(async response => {
+    response = await response.json();
+    console.log(response);
+    for (let index = 0; index < response.results.length; index++) {
+      const produto = response.results[index];
+      
+      document.getElementById('produtos').innerHTML += 
+      `<div p="${produto.properties['Palavras-chave'].rich_text[0].plain_text}" class="column">
+        <div class="content">
+          <img class="p" src="${produto.properties['imagem'].files[0].name}" alt="chá" style="width:100%">
+          <h3>${produto.properties['Nome'].title[0].plain_text}</h3>
+          <span class="wp" onclick="copyImage('${produto.properties['imagem'].files[0].name}')">
+            <i class="far fa-copy fa-2x"></i>
+            <span style="padding: 10px;">Copiar Imagem</span>
+          </span>
+        </div>
+      </div>`;
+    }
+  })
+  .catch(err => {
+    console.error(err);
+  });
+}
+
+function copyImage(imageSrc) {
+  const dummyElement = document.createElement('textarea');
+  dummyElement.value = imageSrc;
+  document.body.appendChild(dummyElement);
+  dummyElement.select();
+  document.execCommand('copy');
+  document.body.removeChild(dummyElement);
+  
+  Swal.fire({
+    title: 'Imagem Copiada!',
+    text: 'A imagem foi copiada para a área de transferência.',
+    icon: 'success',
+    timer: 2000
+  });
+}
+
+carregarprodutos();
+</script>
+</body>
+</html>
